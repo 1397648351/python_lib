@@ -1,0 +1,7 @@
+.idea
+file
+*.pyc
+*.log
+*.spec
+dist
+build
