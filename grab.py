@@ -53,13 +53,10 @@ class Grab:
             return response.read()
         except urllib2.URLError, e:
             restart = True
-            codes = '304,400,401,403,404,11001'
+            codes = ['304', '400', '401', '403', '404', '11001']
             if hasattr(e, 'code'):
                 code = e.code
             elif hasattr(e, 'reason'):
-                cls.mutex.acquire()
-                print url, str(e.reason)
-                cls.mutex.release()
                 pattern = re.compile(r'\[.* (\d+)\]', re.M)
                 m = pattern.match(str(e.reason))
                 if m:
