@@ -47,8 +47,8 @@ class Grab:
         headers = cls.headers[index]
         request = urllib2.Request(url, headers=headers)
         if headers_add:
-            for key, value in headers_add:
-                request.add_header(key, value)
+            for key in headers_add:
+                request.add_header(key, headers_add[key])
                 # headers['Referer'] = headers_referer
         try:
             response = urllib2.urlopen(request, timeout=cls.timeout)
