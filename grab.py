@@ -28,7 +28,7 @@ class Grab:
         self.url = url
 
     @classmethod
-    def get_content(cls, url, headers_referer=None):
+    def get_content(cls, url, headers_add=None):
         """
         获取网页内容
         :param url:
@@ -45,9 +45,11 @@ class Grab:
             urllib2.install_opener(opener)
         index = random.randint(0, len(cls.headers) - 1)
         headers = cls.headers[index]
-        if headers_referer:
-            headers['Referer'] = headers_referer
         request = urllib2.Request(url, headers=headers)
+        if headers_add:
+            for key, value in headers_add:
+                request.add_header(key, value)
+                # headers['Referer'] = headers_referer
         try:
             response = urllib2.urlopen(request, timeout=cls.timeout)
             return response.read()
@@ -103,7 +105,10 @@ class Grab:
                 if not noprint:
                     print "%s 已存在" % filename
                 return False
-            content = cls.get_content(url, headers_referer=headers_referer)
+            headers_add = None
+            if headers_referer:
+                headers_add = {'Referer': headers_referer}
+            content = cls.get_content(url, headers_add=headers_add)
             if content:
                 with open(filename, 'wb') as f:
                     f.write(content)
