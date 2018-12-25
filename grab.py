@@ -28,7 +28,7 @@ class Grab:
         self.url = url
 
     @classmethod
-    def get_content(cls, url, headers_add=None):
+    def get_content(cls, url, headers_add=None, cookies=None):
         """
         获取网页内容
         :param url:
@@ -50,6 +50,12 @@ class Grab:
             for key in headers_add:
                 request.add_header(key, headers_add[key])
                 # headers['Referer'] = headers_referer
+        if cookies:
+            str_cookie = ''
+            for key in cookies:
+                str_cookie = '%s%s=%s;' % (str_cookie, key, cookies[key])
+            if str_cookie:
+                request.add_header('Cookie', str_cookie)
         try:
             response = urllib2.urlopen(request, timeout=cls.timeout)
             return response.read()
