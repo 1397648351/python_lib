@@ -16,15 +16,15 @@ class DB:
     def __init__(self):
         self.version = '1.0'
 
-    @staticmethod
-    def doTrans(self, sqlList):
+    @classmethod
+    def doTrans(cls, sqlList):
         """
         执行事务
         :param sqlList: sql集合
         :return: 影响行数
         """
         i = 0
-        connection = pymysql.connect(**self._config)
+        connection = pymysql.connect(**cls._config)
         cur = connection.cursor()
         try:
             for sql in sqlList:
@@ -39,14 +39,14 @@ class DB:
             connection.close()
         return i
 
-    @staticmethod
-    def execute(self, sql):
+    @classmethod
+    def execute(cls, sql):
         """
         执行一条sql
         :param sql: 需要执行的sql
         :return: 影响行数
         """
-        connection = pymysql.connect(**self._config)
+        connection = pymysql.connect(**cls._config)
         cur = connection.cursor()
         try:
             num = cur.execute(sql)
@@ -58,15 +58,15 @@ class DB:
             connection.close()
         return num
 
-    @staticmethod
-    def fetchall(self, sql):
+    @classmethod
+    def fetchall(cls, sql):
         """
         根据sql返回集合
         :param sql: 需要执行的sql
         :return: 集合
         """
-        print self.config
-        connection = pymysql.connect(**self.config)
+        print cls.config
+        connection = pymysql.connect(**cls.config)
         cur = connection.cursor()
         try:
             cur.execute(sql)
@@ -77,14 +77,14 @@ class DB:
         finally:
             connection.close()
 
-    @staticmethod
-    def fetchone(self, sql):
+    @classmethod
+    def fetchone(cls, sql):
         """
         根据sql返回第一个
         :param sql: 需要执行的sql
         :return: 结果
         """
-        connection = pymysql.connect(**self.config)
+        connection = pymysql.connect(**cls.config)
         cur = connection.cursor()
         try:
             cur.execute(sql)
