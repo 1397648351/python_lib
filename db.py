@@ -30,7 +30,7 @@ class DB:
         :return: 影响行数
         """
         i = 0
-        connection = pymysql.connect(**cls._config)
+        connection = pymysql.connect(**cls.config)
         cur = connection.cursor()
         try:
             for sql in sqlList:
@@ -38,6 +38,7 @@ class DB:
                 i = i + 1
             connection.commit()
         except Exception as e:
+            print 'error:', sqlList[i]
             i = 0
             connection.rollback()
             raise e
@@ -52,7 +53,7 @@ class DB:
         :param sql: 需要执行的sql
         :return: 影响行数
         """
-        connection = pymysql.connect(**cls._config)
+        connection = pymysql.connect(**cls.config)
         cur = connection.cursor()
         try:
             num = cur.execute(sql)
