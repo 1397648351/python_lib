@@ -38,7 +38,7 @@ class DB:
                 i = i + 1
             connection.commit()
         except Exception as e:
-            print 'error:', sqlList[i]
+            print('error:', sqlList[i])
             i = 0
             connection.rollback()
             raise e
@@ -73,7 +73,7 @@ class DB:
         :param sql: 需要执行的sql
         :return: 集合
         """
-        # print cls.config
+        # print(cls.config)
         connection = pymysql.connect(**cls.config)
         cur = connection.cursor()
         try:

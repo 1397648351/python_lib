@@ -11,9 +11,6 @@ import os
 import shutil
 from xml.etree import ElementTree as ET
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
-
 
 class XmlAnalysis:
     def __init__(self):

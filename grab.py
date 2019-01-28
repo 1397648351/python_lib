@@ -6,10 +6,7 @@
 # @Desc   :
 # ==================================================
 
-import sys, os, urllib2, threading, time, re, random
-
-reload(sys)
-sys.setdefaultencoding('utf-8')
+import os, urllib.request, threading, time, re, random
 
 
 class Grab:
@@ -44,14 +41,14 @@ class Grab:
             raise GrabError(u"URL不能为空")
         if cls.use_proxy:
             # We create a handler for the proxy
-            proxy_support = urllib2.ProxyHandler({"http": "http://%(host)s:%(port)d" % cls.proxy_info})
+            proxy_support = urllib.request.ProxyHandler({"http": "http://%(host)s:%(port)d" % cls.proxy_info})
             # We create an opener which uses this handler:
-            opener = urllib2.build_opener(proxy_support)
-            # Then we install this opener as the default opener for urllib2:
-            urllib2.install_opener(opener)
+            opener = urllib.request.build_opener(proxy_support)
+            # Then we install this opener as the default opener for urllib.request:
+            urllib.request.install_opener(opener)
         index = random.randint(0, len(cls.headers) - 1)
         headers = cls.headers[index]
-        request = urllib2.Request(url, headers=headers)
+        request = urllib.request.Request(url, headers=headers)
         if headers_add:
             for key in headers_add:
                 request.add_header(key, headers_add[key])
@@ -63,9 +60,9 @@ class Grab:
             if str_cookie:
                 request.add_header('Cookie', str_cookie)
         try:
-            response = urllib2.urlopen(request, timeout=cls.timeout)
+            response = urllib.request.urlopen(request, timeout=cls.timeout)
             return response.read()
-        except urllib2.URLError, e:
+        except urllib.request.URLError as e:
             restart = True
             codes = ['304', '400', '401', '403', '404', '11001']
             if hasattr(e, 'code'):
@@ -78,11 +75,11 @@ class Grab:
             if 'code' in vars() and str(code) in codes:
                 cls.mutex.acquire()
                 restart = False
-                print 'Error Code: %s, URL: %s' % (code, url)
+                print('Error Code: %s, URL: %s' % (code, url))
                 cls.mutex.release()
             else:
                 cls.mutex.acquire()
-                print url, e.reason
+                print(url, e.reason)
                 cls.mutex.release()
             if restart:
                 time.sleep(1)
@@ -115,7 +112,7 @@ class Grab:
             cls.mutex.release()
             if confirm:
                 if not noprint:
-                    print "%s 已存在" % filename
+                    print("%s 已存在" % filename)
                 return False
             headers_add = None
             if headers_referer:
@@ -125,10 +122,10 @@ class Grab:
                 with open(filename, 'wb') as f:
                     f.write(content)
             if not noprint:
-                print '%s 下载完成！' % filename
+                print('%s 下载完成！' % filename)
             return True
-        except Exception, e:
-            print '%s %s/%s error:%s' % (url, path, name, str(e))
+        except Exception as e:
+            print('%s %s/%s error:%s' % (url, path, name, str(e)))
             return False
 
 
